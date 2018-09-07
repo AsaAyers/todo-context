@@ -49,12 +49,16 @@ export default class AppContext extends Component {
             }
         }
     }
-    getState = () => this.state
 
+    constructor(...args) {
+        super(...args)
+        const getState = () => this.state
+        const setState = this.setState.bind(this)
 
-    providedContext = {
-        ...todoActions(this.getState, this.setState.bind(this)),
-        ...userActions(this.getState, this.setState.bind(this))
+        this.providedContext = {
+            ...todoActions(getState, setState),
+            ...userActions(getState, setState)
+        }
     }
 
     render() {
