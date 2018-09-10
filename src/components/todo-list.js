@@ -23,6 +23,7 @@ export default withAppContext(function TodoList({ appContext }) {
         </li>
     )
 
+    console.log('Render <TodoList')
     return (
         <div>
             <h1>TODOs</h1>

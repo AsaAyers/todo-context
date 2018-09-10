@@ -61,7 +61,26 @@ export default class AppContext extends Component {
         }
     }
 
+    brokenRender() {
+        // https://reactjs.org/docs/context.html#caveats
+        //
+        // Because context uses reference identity to determine when to
+        // re-render, there are some gotchas that could trigger unintentional
+        // renders in consumers when a provider’s parent re-renders. For
+        // example, the code below will re-render all consumers every time the
+        // Provider re-renders because a new object is always created for value:
+        return (
+            <Provider value={{
+                ...this.providedContext,
+                data: this.state
+            }}>
+                {this.props.children}
+            </Provider>
+        );
+    }
+
     render() {
+        console.log('Render <AppContext')
         this.providedContext = contextMerger(this.providedContext, this.state)
 
         return (
