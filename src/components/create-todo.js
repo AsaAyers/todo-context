@@ -1,8 +1,8 @@
 import React from 'react'
-import { withAppContext } from '../app-context'
+import { Consumer, withAppContext } from '../app-context'
 
 
-export default withAppContext(class CreateTodo extends React.Component {
+class CreateTodo extends React.PureComponent {
     state = {
         text: ""
     }
@@ -10,7 +10,7 @@ export default withAppContext(class CreateTodo extends React.Component {
     createTodo = async (event) => {
         event.preventDefault()
         const { appContext } = this.props
-        await appContext.createTodo(this.state.text)
+        await this.props.createTodo(this.state.text)
         this.setState({
             text: ""
         })
@@ -22,6 +22,7 @@ export default withAppContext(class CreateTodo extends React.Component {
 
 
     render() {
+        console.log('Render <CreateTodo')
         const btnDisabled = (
             this.state.text.trim().length === 0
         )
@@ -34,4 +35,12 @@ export default withAppContext(class CreateTodo extends React.Component {
         )
     }
 
-})
+}
+
+export default function (props) {
+    return (
+        <Consumer>{(appState) => (
+            <CreateTodo {...props} createTodo={appState.createTodo} />
+        )}</Consumer>
+    )
+}
