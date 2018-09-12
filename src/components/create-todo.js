@@ -1,5 +1,5 @@
 import React from 'react'
-import { Consumer, withAppContext } from '../app-context'
+import { Consumer } from '../app-context'
 
 
 class CreateTodo extends React.PureComponent {
@@ -9,7 +9,6 @@ class CreateTodo extends React.PureComponent {
 
     createTodo = async (event) => {
         event.preventDefault()
-        const { appContext } = this.props
         await this.props.createTodo(this.state.text)
         this.setState({
             text: ""

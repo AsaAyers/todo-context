@@ -37,28 +37,29 @@ export default class AppContext extends Component {
             username: 'Asa'
         },
         todos: {
-            1: {
-                id: 1,
-                text: 'not done',
-                done: false,
-            },
-            2: {
-                id: 2,
-                text: 'done',
-                done: true,
-            }
         }
     }
 
-    constructor(...args) {
-        super(...args)
+    constructor(props, context) {
+        super(props, context)
+        this.buildContext(props)
+    }
+
+    // Which lifecycle should call this if props change?
+    buildContext = (props) => {
         const getState = () => this.state
         const setState = this.setState.bind(this)
 
+        const { todoApi } = props
+
         this.providedContext = {
-            ...todoActions(getState, setState),
-            ...userActions(getState, setState)
+            ...todoActions({getState, setState, todoApi}),
+            ...userActions({getState, setState})
         }
+    }
+
+    componentDidMount() {
+        this.providedContext.getTodos()
     }
 
     brokenRender() {

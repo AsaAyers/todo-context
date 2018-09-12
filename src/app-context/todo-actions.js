@@ -1,18 +1,15 @@
-import uuid from 'uuid/v4'
 
-export default (getState, setState) => ({
+export default ({getState, setState, todoApi}) => ({
+    getTodos: async function() {
+        const todos = await todoApi.getTodos()
+
+        // Overwrite local todos
+        setState({ todos })
+    },
     setStatus: async function (id, done = true) {
-        const state = getState()
-        if (state.todos[id] == null) {
-            throw new Error(`Todo not found: ${id}`)
-        }
+        const todo = await todoApi.setStatus(id, done)
 
         setState(state => {
-            const todo = {
-                ...state.todos[id],
-                done
-            }
-
             return {
                 todos: {
                     ...state.todos,
@@ -23,11 +20,7 @@ export default (getState, setState) => ({
         })
     },
     createTodo: async function (text) {
-        const todo = {
-            id: uuid(),
-            done: false,
-            text
-        }
+        const todo = await todoApi.createTodo(text)
 
         setState(state => {
             return {
